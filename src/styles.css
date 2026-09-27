@@ -18,7 +18,9 @@ body {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -29,6 +31,11 @@ button {
   background: #ffffff;
   color: #172033;
   cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .app {
@@ -47,7 +54,7 @@ button {
 }
 
 .hero {
-  min-height: 250px;
+  min-height: 230px;
   display: grid;
   align-content: center;
   gap: 14px;
@@ -74,7 +81,7 @@ button {
 }
 
 .hero span {
-  max-width: 860px;
+  max-width: 900px;
   color: #526071;
   line-height: 1.75;
 }
@@ -101,33 +108,42 @@ button {
   font-size: 30px;
 }
 
-.workspace {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 18px;
+/* 页签 */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 18px;
+}
+
+.tab {
+  padding: 0 16px;
+  border-color: color-mix(in srgb, var(--primary) 24%, var(--border));
+  background: color-mix(in srgb, var(--primary) 6%, #ffffff);
+}
+
+.tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.tab.reset {
+  margin-left: auto;
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
 }
 
 .panel {
   padding: 22px;
+  margin-bottom: 18px;
 }
 
 .panel h2,
 .panel h3,
 .heading p {
   margin-top: 0;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.chips button {
-  padding: 0 12px;
-  border-color: color-mix(in srgb, var(--primary) 24%, var(--border));
-  background: color-mix(in srgb, var(--primary) 8%, #ffffff);
 }
 
 .heading {
@@ -149,10 +165,91 @@ button {
   padding: 0 14px;
 }
 
+/* 筛选 chips */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.chips .chip {
+  padding: 0 12px;
+  border-color: color-mix(in srgb, var(--primary) 24%, var(--border));
+  background: color-mix(in srgb, var(--primary) 8%, #ffffff);
+}
+
+.chips .chip.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* 徽标 */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge.ok {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.badge.pending {
+  color: #b91c1c;
+  background: #fee2e2;
+}
+
+/* 批次列表 */
+.batch-table {
+  display: grid;
+  gap: 8px;
+}
+
+.batch-row {
+  display: grid;
+  grid-template-columns: 110px 90px 1.2fr 90px 90px 140px 90px 80px;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fbfdff;
+  text-align: left;
+  font-size: 14px;
+  width: 100%;
+}
+
+.batch-row:not(.batch-head):hover {
+  border-color: var(--primary);
+}
+
+.batch-row.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.batch-head {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  font-size: 12px;
+  padding: 0 12px;
+}
+
+/* 表单 */
 .field-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+  margin-bottom: 14px;
 }
 
 label {
@@ -165,52 +262,297 @@ label span {
   font-size: 13px;
 }
 
-input {
+label.block {
+  margin-bottom: 4px;
+}
+
+input,
+select,
+textarea {
   width: 100%;
   min-height: 42px;
   border-radius: 7px;
   border: 1px solid var(--border);
   padding: 0 12px;
+  background: #ffffff;
 }
 
-.records {
+textarea {
+  padding: 10px 12px;
+  resize: vertical;
+  font-family: ui-monospace, "SFMono-Regular", Consolas, monospace;
+  font-size: 13px;
+}
+
+.form-error {
+  color: var(--accent);
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.hint {
+  color: #64748b;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.empty {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* 详情卡 */
+.detail-grid {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+  margin-bottom: 16px;
 }
 
-.records article {
+.detail-grid div {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fbfdff;
+}
+
+.detail-grid div.wide {
+  grid-column: 1 / -1;
+}
+
+.detail-grid span {
+  display: block;
+  color: #64748b;
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.conclusion {
+  border: 1px solid color-mix(in srgb, var(--primary) 40%, var(--border));
+  border-left: 5px solid var(--primary);
+  background: color-mix(in srgb, var(--primary) 6%, #ffffff);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+}
+
+.conclusion.stale {
+  border-color: color-mix(in srgb, var(--secondary) 50%, var(--border));
+  border-left-color: var(--secondary);
+  background: color-mix(in srgb, var(--secondary) 8%, #ffffff);
+}
+
+.conclusion span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.conclusion p {
+  margin: 6px 0 0;
+  font-weight: 700;
+}
+
+.notice {
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  background: color-mix(in srgb, var(--accent) 6%, #ffffff);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.notice ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.notice p {
+  margin: 0;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.detail-cols {
   display: grid;
-  grid-template-columns: 54px 1fr;
-  gap: 14px;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+/* 温度点表 */
+.temp-table {
+  max-height: 240px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.temp-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-bottom: 1px solid #eef2f7;
+}
+
+.temp-row.temp-head {
+  position: sticky;
+  top: 0;
+  background: #f1f5f9;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.inline-form {
+  display: grid;
+  gap: 8px;
+}
+
+/* 校准 */
+.cal-item {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  background: #fbfdff;
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.cal-item span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.cal-form {
+  display: grid;
+  gap: 10px;
+  border-top: 1px dashed var(--border);
+  padding-top: 12px;
+}
+
+.cal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 110px;
+  gap: 10px;
+}
+
+/* 修正历史 */
+.timeline {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.timeline-item {
+  border-left: 4px solid var(--secondary);
+  background: #fbfdff;
+  border-radius: 0 8px 8px 0;
+  padding: 10px 14px;
+  display: grid;
+  gap: 4px;
+}
+
+.timeline-item span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.timeline-item p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.recalc {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+/* 案件关联 */
+.case-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+}
+
+.case-card {
+  margin-bottom: 0;
+}
+
+.case-meta {
+  color: #64748b;
+  font-size: 14px;
+  margin-top: -8px;
+}
+
+.case-samples {
+  display: grid;
+  gap: 8px;
+}
+
+.case-sample {
+  display: grid;
+  grid-template-columns: 90px 1fr auto;
+  gap: 10px;
   align-items: center;
-  padding: 14px;
+  text-align: left;
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.case-sample span {
+  color: #526071;
+}
+
+/* 温度图 */
+.chart {
+  width: 100%;
+  height: auto;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: #fbfdff;
 }
 
-.records b {
-  display: grid;
-  place-items: center;
-  height: 44px;
-  border-radius: 8px;
-  color: #ffffff;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-}
-
-.records h3 {
-  margin-bottom: 6px;
-}
-
-.records p {
-  margin: 0;
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 10px;
+  font-size: 13px;
   color: #526071;
-  line-height: 1.6;
+}
+
+.chart-legend i {
+  display: inline-block;
+  width: 18px;
+  height: 4px;
+  border-radius: 2px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+@media (max-width: 960px) {
+  .batch-row {
+    grid-template-columns: 90px 80px 1fr 80px 80px;
+  }
+
+  .batch-row span:nth-child(6),
+  .batch-row span:nth-child(7) {
+    display: none;
+  }
+
+  .detail-cols,
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 860px) {
   .metrics,
-  .workspace,
   .field-grid {
     grid-template-columns: 1fr;
   }
@@ -218,5 +560,10 @@ input {
   .hero {
     min-height: 210px;
     padding: 24px;
+  }
+
+  .cal-row,
+  .recalc {
+    grid-template-columns: 1fr;
   }
 }
